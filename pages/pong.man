@@ -1,0 +1,16 @@
+name: Pong
+tags: start,begin,beginner,tutor,tutorial,sample,example,excercise,code,intro,arcade
+
+## Intro
+
+Pong is a classic arcade game.
+
+## Setup
+
+To setup we need to create Paddles:
+```
+#include::../demo/pong-pe/setup.js
+```
+
+Now we can create necessary classes.
+

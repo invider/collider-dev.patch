@@ -1,0 +1,17 @@
+#!/bin/sh
+
+TARGET=../collider-dev.mix/help.mod/man/pages/dev/
+
+./preprocess
+
+
+echo "cleaning up target folder..."
+rm -rf $TARGET
+mkdir -p $TARGET
+
+echo "moving generated content to [$TARGET]"
+mv ./out/* $TARGET 
+echo "============"
+echo "Pages:"
+ls $TARGET
+
