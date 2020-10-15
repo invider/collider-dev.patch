@@ -13,36 +13,140 @@ Also, with its iconic gameplay, it still works as a good exercise in game develo
 
 Thus, this tutorial covers all the steps necessary to implement a web-based clone of Pong with Collider.JAM and JavaScript.
 
-
-
 == Core Concepts
 
+We need at least 3 components to implement
+a viable Pong version:
+
+* a puck moved by its speed vector
+* two paddles controlled by players
+* a score counter
+
+There is also an invisible, but nevertheless present,
+simple physics simulation to detect the puck
+collisions with the paddles and the walls.
+
+The game scene is going to be represented by a single *mod*.
+
 _
-> You can view a *mod* as a minigame with its own structure.
-> Usually its structure is determined by the corresponding directory.
+> Collider.JAM has the concept of *mods*, which can represent
+> modules, plugins, scenes, levels, game layers, and game states among other things.
+> You can view a *mod* as a minigame with its own code,
+> structure, resources...
+> Like the main menu, or a player configuration screen,
+> or maybe a map screen.
+> Usually the *mod* structure is determined
+> by the corresponding directory.
 > A *mod* has it's own *dna*, *lab*, *trap* and other folders.
-> It might have its own resources. 
 _
 
+
+Inside, we will place the */dna* folder to keep our prototypes.
+
+There are going to be only two of those - Puck and Paddle.
+
+A single object in */lab/score.js* will represent the score.
+
+
+The */res* folder will keep all sound effects. We won't need any bitmap graphics in this tutorial, since everything will be drawn in vector.
 
 
 == Foundation
 
+Create a folder named _pong.mod_.
+The _.mod_ extension is necessary for Collider.JAM
+to determine the root of the project.
+
+
+Once created, you can _cd_ into it:
+
+    cd pong.mod
+
+And run the empty mod with:
+
+    jam -d
+
+The _-d_ flag tells collider to enable development and debug features.
+
+It is very useful in developing.
+
 _
 > Make sure you have [Collider.JAM](http://colliderlabs.com/jam) installed
 > before starting this tutorial.
+> The easiest way is to run "npm i -g collider.jam"
+> in a terminal emulator.
 > Collider.JAM is what makes this JavaScript magic happening.
+
 _
+
+== Puck
+
+
+Puck prototype implements the puck behavior and visuals.
+
+
+
+```
+// dna/Puck.js
+#include::../demo/pong-ce.mod/dna/Puck.js
+```
+
+
+== Paddle
+
+```
+// dna/Paddle.js
+#include::../demo/pong-ce.mod/dna/Paddle.js
+```
+
+
+== Traps
+Keys are traped by the following 2 functions:
+
+```
+// trap/keyDown.js
+#include::../demo/pong-ce.mod/trap/keyDown.js
+```
+```
+// trap/keyUp.js
+#include::../demo/pong-ce.mod/trap/keyUp.js
+```
+New game event is traped by:
+```
+// trap/newGame.js
+#include::../demo/pong-ce.mod/trap/newGame.js
+```
+
+The following trap counts the score
+```
+// trap/score.js
+#include::../demo/pong-ce.mod/trap/score.js
+```
+
+_spawnPuck_ creates a new Puck in _/lab_:
+
+
+```
+// trap/spawnPuck.js
+#include::../demo/pong-ce.mod/trap/spawnPuck.js
+```
 
 
 
 == Setup
 
-To setup we need to create Paddles:
+_setup.js_ contains the function run
+
+just before the game starts:
+
 ```
 #include::../demo/pong-ce.mod/setup.js
 ```
 
+It just calls 'newGame' trap.
+
+
+==  Misc
 ```
 #include::../demo/pong-ce.mod/setup.js | grep trap
 ```
@@ -51,5 +155,42 @@ To setup we need to create Paddles:
 #include::../demo/pong-ce.mod/dna/Puck.js | sed -n '/evo/,/draw/p' | head -n -2
 ```
 
-Now we can create necessary classes.
+
+== Source Code
+
+
+Full source code is
+
+[available on GitHub](https://github.com/invider/pong-ce.mod).
+
+
+== Ideas for Improvement
+There are multiple directions you can go from here.
+You can introduce more variety into the gameplay by providing some kind of random powerups to modify game properties - like increase paddle speed or size, slow down the puck, etc...
+You can improve visuals by adding bitmapped graphics or particle effects on collisions.
+You can implement simple AI to be able to play against a computer.
+You can add the ability to play over the network.
+There might be other interesting ideas waiting to be implemented. Even the old and familiar gameplay from Pong can be rethought and refreshed.
+
+
+== Summary
+
+Collider.JAM makes a good job of hiding complexity
+and free you from the boilerplate.
+
+You don't see any imports, exports, requires, load calls to get resources or extend constructions to inherit any of the framework prototypes.
+
+You just name the functions and place the files in appropriate folders according to Collider.JAM conventions. 
+
+And everything is just magically put together.
+
+That is the magic of Collider.JAM!
+
+Also notice how straightforward drawing and other common operations like _sin()_, _cos()_, _trap()_, _augment()_, and _kill()_. They are just functions available from the global context. No need to access those features from the bunch of incomprehensive utility objects like Context and Math. They are just there under your tips when you need them.
+
+It almost makes JavaScript as clear and straightforward as BASIC. The code looks like a polite conversation with Collider.JAM instead of a rude arguing with the object system.
+
+
+
+
 
