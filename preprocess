@@ -12,6 +12,7 @@ LIST=`ls | grep '.*\.man' | sort`
 TABLE=''
 for f in $LIST; do
     echo "prerocessing $f..."
+
     cat $f | awk '
         /#include/ { system("cat "substr($0, 11)); }
         !/#include/ { print $0 }

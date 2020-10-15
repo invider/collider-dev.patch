@@ -1,15 +1,54 @@
 name: Pong
 tags: start,begin,beginner,tutor,tutorial,sample,example,excercise,code,intro,arcade
 
-## Intro
+== Intro
 
-Pong is a classic arcade game.
+Pong was created in 1972 by Allan Alcorn, the 2nd non-founding employee of Atari, as an exercise. Nolan Bushnell, the Atari co-founder, reasoned that an electronic version of ping-pong will be a perfect way to get familiar with arcade game development. Especially considering that a similar concept had already been implemented in Magnavox Odyssey. 
 
-## Setup
+Little did they know, that Pong would become a booster that brought Atari into a multi-billion corporation orbit.
+
+Today, Pong is considered to be an arcade classic.
+
+Also, with its iconic gameplay, it still works as a good exercise in game development.
+
+Thus, this tutorial covers all the steps necessary to implement a web-based clone of Pong with Collider.JAM and JavaScript.
+
+
+
+== Core Concepts
+
+_
+> You can view a *mod* as a minigame with its own structure.
+> Usually its structure is determined by the corresponding directory.
+> A *mod* has it's own *dna*, *lab*, *trap* and other folders.
+> It might have its own resources. 
+_
+
+
+
+== Foundation
+
+_
+> Make sure you have [Collider.JAM](http://colliderlabs.com/jam) installed
+> before starting this tutorial.
+> Collider.JAM is what makes this JavaScript magic happening.
+_
+
+
+
+== Setup
 
 To setup we need to create Paddles:
 ```
-#include::../demo/pong-pe/setup.js
+#include::../demo/pong-ce.mod/setup.js
+```
+
+```
+#include::../demo/pong-ce.mod/setup.js | grep trap
+```
+
+```
+#include::../demo/pong-ce.mod/dna/Puck.js | sed -n '/evo/,/draw/p' | head -n -2
 ```
 
 Now we can create necessary classes.
