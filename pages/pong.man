@@ -50,6 +50,13 @@ A single object in */lab/score.js* will represent the score.
 
 The */res* folder will keep all sound effects. We won't need any bitmap graphics in this tutorial, since everything will be drawn in vector.
 
+> Note, that file location and name are important for Collider.JAM.
+> For example, there won't be any score if *score.js*
+> will be placed outside of */lab*.
+> Because objects in */lab* are "alive".
+> Puck and Paddle MUST be placed in */dna* for similar reason.
+> Constructors and factories are expected to be in */dna*.
+
 
 == Foundation
 
@@ -83,6 +90,8 @@ _
 
 
 Puck prototype implements the puck behavior and visuals.
+
+
 
 
 
