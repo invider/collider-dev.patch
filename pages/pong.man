@@ -48,12 +48,14 @@ There are going to be only two of those - Puck and Paddle.
 A single object in */lab/score.js* will represent the score.
 
 
-The */res* folder will keep all sound effects. We won't need any bitmap graphics in this tutorial, since everything will be drawn in vector.
+The */res* folder will keep all sound effects. We won't need any bitmap or vector graphic resources in this tutorial, since everything will be drawn in code.
 
 > Note, that file location and name are important for Collider.JAM.
+>
 > For example, there won't be any score if *score.js*
 > will be placed outside of */lab*.
 > Because objects in */lab* are "alive".
+>
 > Puck and Paddle MUST be placed in */dna* for similar reason.
 > Constructors and factories are expected to be in */dna*.
 
@@ -82,17 +84,31 @@ _
 > before starting this tutorial.
 > The easiest way is to run "npm i -g collider.jam"
 > in a terminal emulator.
+>
 > Collider.JAM is what makes this JavaScript magic happening.
 
 _
 
 == Puck
 
+This prototype implements puck behavior and visuals.
+```
+// dna/Puck.js
+#include::../demo/pong-ce.mod/dna/Puck.js | sed -n '/const MAX_SPEED/,/class Puck/p' | head -n -2
+#include::../demo/pong-ce.mod/dna/Puck.js | tail -n 1
+```
+```
+#include::../demo/pong-ce.mod/dna/Puck.js | sed -n '/class Puck/,/evo/p' | head -n -2
+```
 
-Puck prototype implements the puck behavior and visuals.
+```
+#include::../demo/pong-ce.mod/dna/Puck.js | sed -n '/evo/,/draw/p' | head -n -2
+```
 
 
-
+```
+#include::../demo/pong-ce.mod/dna/Puck.js | sed -n '/draw/,/}/p'
+```
 
 
 ```
@@ -161,7 +177,7 @@ It just calls 'newGame' trap.
 ```
 
 ```
-#include::../demo/pong-ce.mod/dna/Puck.js | sed -n '/evo/,/draw/p' | head -n -2
+#include::../demo/pong-ce.mod/dna/Puck.js | sed -n '/evo/,/draw/p' | head -n -2x
 ```
 
 
@@ -169,16 +185,25 @@ It just calls 'newGame' trap.
 
 
 Full source code is
-
 [available on GitHub](https://github.com/invider/pong-ce.mod).
 
 
 == Ideas for Improvement
+
 There are multiple directions you can go from here.
+
 You can introduce more variety into the gameplay by providing some kind of random powerups to modify game properties - like increase paddle speed or size, slow down the puck, etc...
+
+
 You can improve visuals by adding bitmapped graphics or particle effects on collisions.
+
+
 You can implement simple AI to be able to play against a computer.
+
+
 You can add the ability to play over the network.
+
+
 There might be other interesting ideas waiting to be implemented. Even the old and familiar gameplay from Pong can be rethought and refreshed.
 
 
@@ -187,17 +212,16 @@ There might be other interesting ideas waiting to be implemented. Even the old a
 Collider.JAM makes a good job of hiding complexity
 and free you from the boilerplate.
 
-You don't see any imports, exports, requires, load calls to get resources or extend constructions to inherit any of the framework prototypes.
+You don't see any imports, exports, load calls to get resources or extend constructions to inherit any of the framework prototypes.
 
-You just name the functions and place the files in appropriate folders according to Collider.JAM conventions. 
-
-And everything is just magically put together.
+You just name the functions and place the files in appropriate folders according to Collider.JAM conventions. And everything is just magically mixed together.
 
 That is the magic of Collider.JAM!
 
 Also notice how straightforward drawing and other common operations like _sin()_, _cos()_, _trap()_, _augment()_, and _kill()_. They are just functions available from the global context. No need to access those features from the bunch of incomprehensive utility objects like Context and Math. They are just there under your tips when you need them.
 
-It almost makes JavaScript as clear and straightforward as BASIC. The code looks like a polite conversation with Collider.JAM instead of a rude arguing with the object system.
+It makes JavaScript almost as clear and straightforward as BASIC. The code looks like a polite conversation with the framework instead of a rude arguing with the object system.
+
 
 
 
