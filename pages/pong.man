@@ -26,15 +26,18 @@ There is also an invisible, but nevertheless present,
 simple physics simulation to detect the puck
 collisions with the paddles and the edges.
 
-The game scene is going to be represented by a single *mod*.
+The game scene is going to be implemented in a single *mod*.
 
 _
 > Collider.JAM has the concept of *mods*, which can represent
-> modules, plugins, scenes, levels, game layers, and game states among other things.
-> You can view a *mod* as a minigame with its own code,
+> modules, plugins, scenes, levels, game layers, and game states 
+among other things.
+>
+> You can view a *mod* as a minigame with its code,
 > structure, resources...
 > Like the main menu, or a player configuration screen,
 > or maybe a map screen.
+>
 > Usually the *mod* structure is determined
 > by the corresponding directory.
 > A *mod* has it's own *dna*, *lab*, *trap* and other folders.
@@ -50,11 +53,11 @@ A single object in */lab/score.js* will represent the score.
 
 The */res* folder will keep all sound effects. We won't need any bitmap or vector graphic resources in this tutorial, since everything will be drawn in code.
 
-> Note, that file location and name are important for Collider.JAM.
+> Note, that the file location and name are important for Collider.JAM.
 >
 > For example, there won't be any score if *score.js*
 > will be placed outside of */lab*.
-> Because objects in */lab* are "alive".
+> Objects in */lab* are considered to be "alive".
 >
 > Puck and Paddle MUST be placed in */dna* for similar reason.
 > Constructors and factories are expected to be in */dna*.
@@ -75,19 +78,18 @@ And run the empty mod with:
 
     jam -d
 
-The _-d_ flag tells collider to enable development and debug features.
+The _-d_ flag tells Collider.JAM to enable development and debug features.
 
 It is very useful in developing.
 
 _
-> Make sure you have [Collider.JAM](http://colliderlabs.com/jam) installed
+> Make sure you have [Collider.JAM](http://collider.land) installed
 > before starting this tutorial.
 > The easiest way is to run "npm i -g collider.jam"
 > in a terminal emulator.
 >
 > Collider.JAM makes all kind of JavaScript magic
-> to remove the boilerplate code and make development
-> as simple as possible.
+> to hide the boilerplate and make developments smooth.
 _
 
 
@@ -112,13 +114,16 @@ Let's declare some constants and default values:
 We'll use _class_ syntax to declare our prototype.
 It's concise and works well except for a few special cases.
 ```
+// dna/Puck.js
+// ...
+
 #include::../demo/pong-ce.mod/dna/Puck.js | sed -n '/class Puck/,/evo/p' | head -n -2
 #include::../demo/pong-ce.mod/dna/Puck.js | tail -n 1
 ```
 The _augment()_ function is provided by Collider.JAM and augments the target object with values from source objects.
 
-We assign default values from *df* first and init values form *st* later (so init values can override the default ones).
-It is a common idiom in Collider.JAM object initialization - declare an object with default values, pass an object with init values, and then augment the constructed object.
+We assign default values from *df* first and init values form *st* later (so the init values can override the default ones).
+It is a common idiom in Collider.JAM object initialization - declare an object with default values, pass an object with init values, and then augment the constructed object with both.
 
 
 === behavior
@@ -151,7 +156,7 @@ In the case of the left or the right edge, we kill the puck and score the corres
 
 The collision detection with paddles is different since it is handled mostly by the paddles.
 
-We iterate over all nodes in _/lab_ and find the ones with *touch* (we assume that *touch()* will be a function here). The *touch()* function will be defined on all entities the puck can touch (paddles).
+We iterate over all nodes in _/lab_ and find the ones with *touch* (we assume that *touch()* will be a function here). The *touch()* function will be defined on all entities the puck can touch (paddles in our case).
 
 When the paddle hit is detected, we raise the _touched_ flag and increase the speed. The puck movement vector reflection is done in the paddle itself since it depends on the place on the paddle we hit.
 
@@ -163,8 +168,8 @@ The _draw()_ procedures of Puck are pretty simple - we just have to draw a circl
 ```
 #include::../demo/pong-ce.mod/dna/Puck.js | sed -n '/draw/,/}/p'
 ```
-To setup the drawing, we set the line width and the stroke color.
-And then call _circle_ function to draw the circle.
+To setup the drawing, we set the line width in pixels and the stroke HSL color.
+Then we call the _circle()_ function to draw the circle.
 
 
 
@@ -174,10 +179,11 @@ This *class* represents the left and the right paddles.
 
 Its _draw()_ and _evo(dt)_ functions are quite simple.
 
-The _touch()_ method is the most complex one and handles the collision detection with the puck. It is also responsible for the puck movement vector reflection according to the _REFLECT_VECTORS_ table.
+The _touch()_ method is the most complex one and handles the collision detection with the puck. It is also responsible for the puck movement vector reflection according to the _REFLECT\_VECTORS_ table.
 
 ```
 // dna/Paddle.js
+
 #include::../demo/pong-ce.mod/dna/Paddle.js
 ```
 
@@ -189,12 +195,16 @@ Keys are traped by the following 2 functions:
 
 ```
 // trap/keyDown.js
+
 #include::../demo/pong-ce.mod/trap/keyDown.js
 ```
 ```
 // trap/keyUp.js
+
 #include::../demo/pong-ce.mod/trap/keyUp.js
 ```
+Here we access the paddles directly through the lab with _lab.left_ and _lab.right_.
+
 We raise movement flags in _keyDown()_ and reset them in _keyUp()_.
 
 
@@ -209,7 +219,7 @@ The _"new game"_ event is traped by:
 // trap/newGame.js
 #include::../demo/pong-ce.mod/trap/newGame.js
 ```
-Here we do all initial setup and spawning. It is trapped by _setup.js_ when the game starts and also by pressing the Escape key.
+Here we do all initial setup and spawning. It is trapped by _setup.js_ when the game starts and also manually by pressing the Escape key.
 
 
 === score
@@ -219,18 +229,22 @@ The following trap counts the score:
 // trap/score.js
 #include::../demo/pong-ce.mod/trap/score.js
 ```
+We use a global-level node *env* to keep the *score* object. The player argument can be _left_ or _right_. And we rise the score accordingly.
 
-
-== spawn puck
+=== spawn puck
 
 _spawnPuck_ creates a new Puck in _/lab_:
 
 
 ```
 // trap/spawnPuck.js
+
 #include::../demo/pong-ce.mod/trap/spawnPuck.js
 ```
+The puck is created by the _spawn()_ function in *lab*.
+We pass a DNA name and an init object there.
 
+The provided init object sets the name, the speed, and the puck coordinates. With screen-relative functions _rx()_ and _ry()_ we place it in the middle of the screen.
 
 
 == Setup
@@ -262,7 +276,7 @@ You can introduce more variety into the gameplay by providing some kind of rando
 You can improve visuals by adding bitmapped graphics or particle effects on collisions.
 
 
-You can implement simple AI to be able to play against a computer.
+You can implement simple AI to be able to play against the computer.
 
 
 You can add the ability to play over the network.
@@ -276,7 +290,7 @@ There might be other interesting ideas waiting to be implemented. Even the old a
 Collider.JAM makes a good job of hiding complexity
 and free you from the boilerplate.
 
-You don't see any imports, exports, load calls to get resources or extend constructions to inherit any of the framework prototypes.
+You don't need any imports, exports, load calls to get resources or extend constructions to inherit any of the framework prototypes.
 
 You just name the functions and place the files in appropriate folders according to Collider.JAM conventions. And everything is just magically mixed together.
 
